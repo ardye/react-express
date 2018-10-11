@@ -1,5 +1,13 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const path = require('path');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+const staticFile = express.static(path.join(__dirname + '/client/build'));
+app.use(staticFile);
 
 app.get('/api/customers', (req, res) => {
   const customers = [
@@ -11,7 +19,7 @@ app.get('/api/customers', (req, res) => {
   ];
   res.json(customers);
 });
-
+app.use('/*', staticFile);
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server started on ${port}`);
